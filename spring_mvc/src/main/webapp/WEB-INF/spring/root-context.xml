@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+
+	<!-- 여기에는 모든 곳에서 공통적으로 사용하는 bean을 등록하거나 설정을 합니다. 주로 데이터베이스 관련 설정을 합니다. -->
+
+
+	<!-- 데이터베이스 접속 정보: mysql -->
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName">
+			<value>com.mysql.cj.jdbc.Driver</value>
+		</property>
+
+		<property name="url">
+			<value>jdbc:mysql://localhost:3306/user00?uesUnicode=yes&amp;characterEncoding=UTF-8&amp;serverTimezone=UTC
+			</value>
+		</property>
+
+		<property name="username">
+			<value>user00</value>
+		</property>
+
+		<property name="password">
+			<value>user00</value>
+		</property>
+	</bean>
+
+
+
+	<!-- 데이터베이스 연동 프레임워크 bean -->
+	<!-- XML 파일을 사용하는 MyBatis bean -->
+	<!-- <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean"> 
+		<property name="dataSource" ref="dataSource" /> <property name="configLocation" 
+		value="classpath:mybatis/mybatis-config.xml" /> <property name="mapperLocations" 
+		value="classpath:mybatis/mappers/**/*.xml" /> </bean> <bean id="sqlSession" 
+		class="org.mybatis.spring.SqlSessionTemplate"> <constructor-arg index="0" 
+		ref="sqlSessionFactory" /> </bean> -->
+	
+	
+	<!-- Mapper 인터페이스 설정 -->
+	<bean id="sqlSessionFactory"
+		class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="kr.co.js.dao" />
+
+	</bean>
+
+	<!-- 하이버네이트 사용을 위한 객체 생성 코드 추가 -->
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="mappingResources">
+			<list>
+				<value>kr/co/js/dao/itemhbm.xml</value>
+			</list>
+		</property>
+
+		<property name="hibernateProperties">
+			<value>
+				hibernate.dialect=org.hibernate.dialect.MySQLDialect
+			</value>
+		</property>
+	</bean>
+
+
+	<!-- 트랜잭션 관련 bean -->
+	<!-- sprinf JDBC와 MyBatis의 트랜잭션매니져 -->
+	<!-- <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"> 
+		<property name="dataSource" ref="dataSource"/> </bean> -->
+
+
+
+</beans>
+
+
+
+
+
+
+
+
+

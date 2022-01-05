@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans
+	xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+
+	<!-- 자바파일에서 사용한 annotation설정을 여기서도 사용할 수 있도록 해주는 설정 -->
+	<annotation-driven />
+
+	<!-- /resource로 시작되는 자원에 대한 요청은 src/main/webapp/resource 디렉토리의 자원을 사용합니다. 
+		이설정을 해주면 자원을 사용할 때 캐싱을 합니다. 캐싱 시간도 설정할 수 있습니다. -->
+	<resources mapping="/resources/**" location="/resources/" />
+
+	<!-- Controller에서 forwarding 하는 뷰이름을 리턴했을때 실체 출력할 뷰를 결정하기 위해서 앞이나 뒤의 공통된 
+		설정을 생성, 생략할 수도 있도 다른 ViewResolver를 추가할 수도 잇음 -->
+	<beans:bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix" value="/WEB-INF/views/" />
+		<beans:property name="suffix" value=".jsp" />
+		<beans:property name="order" value="1" />
+	</beans:bean>
+
+	<!-- View 이름을 가지고 직접 view를 선택할 수 있도록 해주는 viewResolver -->
+	<beans:bean
+		class="org.springframework.web.servlet.view.BeanNameViewResolver">
+		<beans:property name="order" value="0" />
+	</beans:bean>
+
+	<!-- download 라는 뷰이름이 왔을때 DownloadView로 출력하도록 해주는 설정 -->
+	<beans:bean id="download" class="kr.co.js.view.DownloadView" />
+
+	<!-- 컨트롤러에서 excel이라는 뷰 이름을 리턴 했을 때 excel 뷰를 출력하도록 설정 -->
+	<beans:bean id="excel" class="kr.co.js.view.ExcelView" />
+
+	<!-- 컨트롤러에서 pdf이라는 뷰 이름을 리턴 했을 때 pdf 뷰를 출력하도록 설정 -->
+	<beans:bean id="pdf" class="kr.co.js.view.PdfView" />
+
+	<!-- 컨트롤러에서 json이라는 뷰 이름을 리턴 했을 때 jsonview로 출력하도록 설정 -->
+	<beans:bean id="json"
+		class="org.springframework.web.servlet.view.json.MappingJackson2JsonView" />
+
+	<!-- /exception 요청이 오면 input 이라는 뷰이름을 리턴하도록 설정 -->
+	<view-controller path="/exception" view-name="input" />
+
+
+
+
+	<!-- itemreport 에서 view 이름이 전달된 경우 list 라는 데이터를 xml로 출력하는 요청을 처리하는 뷰 설정 -->
+
+	<beans:bean id="marshaller"
+		class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+		<beans:property name="classesToBeBound">
+			<beans:list>
+				<beans:value>kr.co.js.domain.ItemReport</beans:value>
+			</beans:list>
+		</beans:property>
+	</beans:bean>
+
+	<beans:bean id="itemreport"
+		class="org.springframework.web.servlet.view.xml.MarshallingView">
+		<beans:property name="marshaller" ref="marshaller" />
+		<beans:property name="modelKey" value="list" />
+	</beans:bean>
+
+
+	<!-- 어노테이션이 붙은 클래스의 빈을 자동생성해주는 패키지 설정 ,를 하고 다른 패키지를 추가 할 수 있음 -->
+	<context:component-scan base-package="kr.co.js" />
+
+	<!-- Spring의 controller가 처리하지 못하는 요청은 was가 처리하도록 해주는 설정 -->
+	<default-servlet-handler />
+
+	<!-- Hibernate의 트랜잭션 매니저 -->
+	<beans:bean id="transactionManager"
+		class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<beans:property name="sessionFactory"
+			ref="sessionFactory" />
+	</beans:bean>
+
+	<!--annotation을 이용해서 트랜잭션을 사용할 수 있도록 해주는 설정 -->
+	<tx:annotation-driven />
+
+	<!-- 메세지 파일 설정 -->
+	<beans:bean
+		class="org.springframework.context.support.ResourceBundleMessageSource"
+		id="messageSource">
+		<beans:property name="basenames">
+			<beans:list>
+				<beans:value>message/label</beans:value>
+				<beans:value>message/validation</beans:value>
+			</beans:list>
+		</beans:property>
+	</beans:bean>
+
+	<!-- 파일 업로드를 위한 bean 설정 -->
+	<beans:bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	</beans:bean>
+
+
+
+
+</beans:beans>
