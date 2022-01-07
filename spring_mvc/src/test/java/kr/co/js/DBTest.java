@@ -44,10 +44,8 @@ public class DBTest {
 
 	@Test
 	public void emailCheck() {
-		System.out.println(
-				springUserMapper.emailCheck("ggangpae1@gmail.com"));
-		System.out.println(
-				springUserMapper.emailCheck("ggangpae2@gmail.com"));
+		//System.out.println(springUserMapper.emailCheck("ggangpae1@gmail.com"));
+		//System.out.println(springUserMapper.emailCheck("ggangpae2@gmail.com"));
 	}
 
 	

@@ -17,38 +17,54 @@
 </head>
 <body>
 	<ul>
+		<h3>인터셉터 적용</h3>
+		<ul>
+			<c:if test="${LOGIN == null }">
+				<li><a href="interceptor/login" class="menu">로그인</a></li>
+			</c:if>
+			<c:if test="${LOGIN != null }">
+				<li><a href="interceptor/logout" class="menu">로그아웃</a></li>
+			</c:if>
+			
+			<li><a href="board/boardlist" class="menu">게시물 보기</a></li>
+			<li><a href="board/boardwrite" class="menu">게시물 쓰기</a></li>
+			
+		</ul>
+		
+		
 		<li><a href="hello" class="menu">처음 만들어보는 요청</a>
 		<li><a href="/detail/1229" class="menu">상세보기</a>
-		<li><a href="/parameter" class="menu">파라미터 입력</a>
-		<!--  -->
+		<li><a href="/parameter" class="menu">파라미터 입력</a> <!--  -->
 		<li><a href="/forwarding" class="menu">forwarding - 데이터 전달</a><br />
 		<li><a href="/redirect" class="menu">redirect - 데이터 전달 </a><br />
-		<!--  -->
+			<!--  -->
 		<li><a href="fileview" class="menu">파일 목록 보기</a>
 		<li><a href="excel.xls" class="menu">엑셀 다운로드</a>
 		<li><a href="excleread" class="menu">엑셀 읽기</a>
 		<li><a href="item.pdf" class="menu">PDF 출력</a>
 		<li><a href="item.json" class="menu">JSON 출력</a>
 		<li><a href="item.csv" class="menu">텍스트 출력</a>
-		<li><a href="itemrest.json" class="menu">RESTController-JSON 출력</a>
-		<!--  -->
+		<li><a href="itemrest.json" class="menu">RESTController-JSON출력</a>
+			<!--  -->
 		<li><a href="#" class="menu" id="ajax">ajax 요청(JSON)</a>
-		<li><a href="#" class="menu" id="ajaxxml">ajax 요청(XML)</a>
-		<!--  -->
-		<li><a href="exception" class="menu" >예외 발생</a>
-		<!--  -->
-		<li><a href="message" class="menu" >스프링 메세지 출력</a>
-		<!--  -->
-		<li><a href="fileupload" class="menu" >파일 업로드</a>
-		
-		<fieldset>
-		<legend>회원관리</legend>
-		<li><a href="/user/join" class="menu" >회원가입</a>
-		</fieldset>
-		
-		
-		
-		
+		<li><a href="#" class="menu" id="ajaxxml">ajax 요청(XML)</a> <!--  -->
+		<li><a href="exception" class="menu">예외 발생</a> <!--  -->
+		<li><a href="message" class="menu">스프링 메세지 출력</a> <!--  -->
+		<li><a href="fileupload" class="menu">파일 업로드</a> <!--  --> <c:if
+				test="${userinfo.email == null}">
+				<li><a href="user/join" class="menu">회원가입</a></li>
+				<li><a href="user/login" class="menu">로그인</a></li>
+			</c:if> <c:if test="${userinfo.email != null}">
+				<li><img
+					src="${pageContext.request.contextPath}/profile/${userinfo.image}" />${userinfo.nickname}님
+					<a href="user/logout" class="menu">로그아웃</a></li>
+				<li><a href="user/update" class="menu">회원 정보 수정</a></li>
+			</c:if>
+
+			<fieldset>
+				<legend>회원관리</legend>
+				<li><a href="/user/join" class="menu">회원가입</a>
+			</fieldset>
 	</ul>
 	<div id="disp"></div>
 
